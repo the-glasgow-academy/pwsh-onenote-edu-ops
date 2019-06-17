@@ -174,7 +174,7 @@ function New-TeamClassNotebook {
             "studentSections" = $NotebookSections
         }
         if ($TeacherOnlySection) { $B.Add("hasTeacherOnlySectionGroup", "true") }
-        Add-Data -Endpoint "/notes/classnotebooks/myOrganization/groups/$TeamId" -body $B -IsTeams
+        Add-Data -Endpoint "/myOrganization/groups/$TeamId/notes/classnotebooks" -body $B -IsTeams
     } 
 }
 
@@ -236,7 +236,7 @@ function Add-TeacherOnlySection {
         
     process {
         $b = @{"hasTeacherOnlySectionGroup" = "true" }
-        Set-Data -Endpoint "/notes/classnotebooks/myOrganization/groups/$TeamId/$NotebookId" -Body $b -IsTeams
+        Set-Data -Endpoint "/myOrganization/groups/$TeamId/notes/classnotebooks/$NotebookId" -Body $b -IsTeams
     }
 }
 
