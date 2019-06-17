@@ -17,7 +17,7 @@ function Connect-Api {
     )
 
     Begin {
-        $resource = "https://www.onenote.com"
+        $resource = "https://www.onenote.com/"
     }
 
     process {
