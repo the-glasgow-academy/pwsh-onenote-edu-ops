@@ -22,16 +22,16 @@ function Connect-Api {
 
     process {
         $B = @{
-            "grant_type" = "client_credentials"
-            "client_id" = "$ClientId"
+            "grant_type"    = "client_credentials"
+            "client_id"     = "$ClientId"
             "client_secret" = "$ClientSecret"
-            "resource" = "$resource"
+            "resource"      = "$resource"
         }
         $R = @{
-            method = "POST"
-            URI = "https://login.microsoftonline.com/$TenantId/oauth2/token"
+            method      = "POST"
+            URI         = "https://login.microsoftonline.com/$TenantId/oauth2/token"
             contentType = "application/x-www-form-urlencoded"
-            body = $B
+            body        = $B
         }
         $ENV:ONENOTE_API_TOKEN = (Invoke-RestMethod @R).access_token
     }
@@ -62,15 +62,17 @@ function Get-Data {
 
     Process {
         $R = @{
-            method = "GET"
+            method      = "GET"
             contentType = "application/json"
-            headers = @{
+            headers     = @{
                 "authorization" = "Bearer $ENV:ONENOTE_API_TOKEN"
             }
-            uri = ($resource + $endpoint)
+            uri         = ($resource + $endpoint)
         }
-        if ($IsTeams) { $g.headers.Add("CustomUserAgent", "Teams/1.0")
-        Invoke-RestMethod @R
+        if ($IsTeams) {
+            $g.headers.Add("CustomUserAgent", "Teams/1.0")
+            Invoke-RestMethod @R
+        }
     }
 }
     
@@ -85,7 +87,7 @@ function Get-Notebooks {
     )
 
     Process {
-       Get-Data -Endpoint "/users/$UPN/notes/notebooks"
+        Get-Data -Endpoint "/users/$UPN/notes/notebooks"
     }
 }
 
@@ -132,16 +134,18 @@ function Add-Data {
     process {
         $B = $body | ConvertTo-Json
         $R = @{
-            method = "POST"
+            method      = "POST"
             contentType = "application/json"
-            body = $B
-            headers = @{
+            body        = $B
+            headers     = @{
                 "authorization" = "bearer $ENV:ONENOTE_API_TOKEN"
             }
-            uri = ($resource + $endpoint)
+            uri         = ($resource + $endpoint)
         }
-        if ($IsTeams) { $R.headers.Add("CustomUserAgent", "Teams/1.0")
-        Invoke-RestMethod @R 
+        if ($IsTeams) {
+            $R.headers.Add("CustomUserAgent", "Teams/1.0")
+            Invoke-RestMethod @R 
+        }
     }
 }
 
@@ -168,12 +172,12 @@ function New-TeamClassNotebook {
 
     process {
         $B = @{
-            "name" = "$NotebookName"
+            "name"            = "$NotebookName"
             "studentSections" = $NotebookSections
         }
-        if ($TeacherOnlySection) {$B.Add("hasTeacherOnlySectionGroup", "true")}
+        if ($TeacherOnlySection) { $B.Add("hasTeacherOnlySectionGroup", "true") }
         Add-Data -Endpoint "/notes/classnotebooks/myOrganization/groups/$TeamId" -body $B -IsTeams
-   } 
+    } 
 }
 
 function Set-Data {
@@ -204,16 +208,18 @@ function Set-Data {
     process {
         $B = $Body | ConvertTo-Json
         $R = @{
-            method = "PATCH"
+            method      = "PATCH"
             contentType = "application/json"
-            body = $B
-            headers = @{
+            body        = $B
+            headers     = @{
                 "authorization" = "bearer $ENV:ONENOTE_API_TOKEN"
             }
-            uri = ($resource + $Endpoint)
+            uri         = ($resource + $Endpoint)
         }
-        if ($IsTeams) { $R.headers.Add("CustomUserAgent", "Teams/1.0")
-        Invoke-RestMethod @R 
+        if ($IsTeams) {
+            $R.headers.Add("CustomUserAgent", "Teams/1.0")
+            Invoke-RestMethod @R 
+        }
     }
 }
 
@@ -231,7 +237,7 @@ function Add-TeacherOnlySection {
     )
         
     process {
-        $b = @{"hasTeacherOnlySectionGroup" = "true"}
+        $b = @{"hasTeacherOnlySectionGroup" = "true" }
         Set-Data -Endpoint "/notes/classnotebooks/myOrganization/groups/$TeamId/$NotebookId" -Body $b -IsTeams
     }
 }
@@ -259,7 +265,7 @@ function Copy-Section {
 
     process {
         $B = @{
-            id = "$DestinationSectionId"
+            id      = "$DestinationSectionId"
             groupId = "$DestinationTeamId"
         }
         Add-Data -Body $B -Endpoint "/users/$SourceUPN/onenote/sections/$SourceSectionId/copyToSectionGroup"
