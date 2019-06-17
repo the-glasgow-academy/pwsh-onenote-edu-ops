@@ -69,10 +69,8 @@ function Get-Data {
             }
             uri         = ($resource + $endpoint)
         }
-        if ($IsTeams) {
-            $g.headers.Add("CustomUserAgent", "Teams/1.0")
-            Invoke-RestMethod @R
-        }
+        if ($IsTeams) {$R.headers.Add("CustomUserAgent", "Teams/1.0")}
+        Invoke-RestMethod @R
     }
 }
     
@@ -102,7 +100,7 @@ function Get-TeamNotebook {
     )
 
     Process {
-        Get-Data -Endpoint "/notes/classnotebooks/myOrganization/groups/$TeamID" -IsTeams
+        Get-Data -Endpoint "/myOrganization/groups/$TeamID/notes/classnotebooks" -IsTeams
     }
 }
 
