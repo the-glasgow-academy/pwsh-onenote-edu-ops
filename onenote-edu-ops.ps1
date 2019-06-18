@@ -28,8 +28,8 @@ function Connect-Api {
     }
 
     process {
-        if ($OnenoteAPI) {$resource = "https://www.onenote.com/"}
-        if ($GraphAPI) {$resource = "https://graph.microsoft.com/"}
+        if ($OnenoteAPI) { $resource = "https://www.onenote.com/" }
+        if ($GraphAPI) { $resource = "https://graph.microsoft.com/" }
         $B = @{
             "grant_type"    = "client_credentials"
             "client_id"     = "$ClientId"
@@ -42,8 +42,8 @@ function Connect-Api {
             contentType = "application/x-www-form-urlencoded"
             body        = $B
         }
-        if ($OnenoteAPI) {$ENV:ONENOTE_API_TOKEN = (Invoke-RestMethod @R).access_token}
-        if ($GraphAPI) {$ENV:GRAPH_API_TOKEN = (Invoke-RestMethod @R).access_token}
+        if ($OnenoteAPI) { $ENV:ONENOTE_API_TOKEN = (Invoke-RestMethod @R).access_token }
+        if ($GraphAPI) { $ENV:GRAPH_API_TOKEN = (Invoke-RestMethod @R).access_token }
     }
 }
 
@@ -79,7 +79,7 @@ function Get-Data {
             }
             uri         = ($resource + $endpoint)
         }
-        if ($IsTeams) {$R.headers.Add("CustomUserAgent", "Teams/1.0")}
+        if ($IsTeams) { $R.headers.Add("CustomUserAgent", "Teams/1.0") }
         Invoke-RestMethod @R
     }
 }
