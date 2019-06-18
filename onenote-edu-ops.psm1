@@ -114,7 +114,8 @@ function Get-TeamNotebook {
     )
 
     Process {
-        Get-Data -Endpoint "/myOrganization/groups/$TeamID/notes/$NotebookType" -IsTeams
+        $URL = "/myOrganization/groups/$TeamID/notes/$NotebookType"
+        Get-Data -Endpoint $URL -IsTeams
     }
 }
 
@@ -293,3 +294,33 @@ function Copy-Section {
     }
 }
 
+function Copy-GroupSection {
+    [CmdletBinding()]
+
+    Param (
+
+        [Parameter(Mandatory = $true)]
+        [string]
+        $DestinationTeamId,
+
+        [Parameter(Mandatory = $true)]
+        [string]
+        $DestinationSectionGroupId,
+
+        [Parameter(Mandatory = $true)]
+        [string]
+        $SourceSectionId,
+        
+        [Parameter(Mandatory = $true)]
+        [string]
+        $SourceGroupId
+    )
+
+    process {
+        $B = @{
+            id      = "$DestinationSectionGroupId"
+            groupId = "$DestinationTeamId"
+        }
+        Add-Data -Body $B -Endpoint "/groups/$SourceGroupId/onenote/sections/$SourceSectionId/copyToSectionGroup" -IsGraph
+    }
+}
