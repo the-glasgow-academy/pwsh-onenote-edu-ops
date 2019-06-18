@@ -108,9 +108,9 @@ function Get-TeamNotebook {
         [string]
         $TeamID,
 
-        [Parameters(Mandatory = $true)]
+        [Parameter()]
         [string]
-        $NotebookType 
+        $NotebookType = 'classnotebooks'
     )
 
     Process {
