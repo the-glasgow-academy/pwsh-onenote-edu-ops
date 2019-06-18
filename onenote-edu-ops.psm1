@@ -273,7 +273,7 @@ function Copy-Section {
 
         [Parameter(Mandatory = $true)]
         [string]
-        $DestinationSectionId,
+        $DestinationSectionGroupId,
 
         [Parameter(Mandatory = $true)]
         [string]
@@ -286,7 +286,7 @@ function Copy-Section {
 
     process {
         $B = @{
-            id      = "$DestinationSectionId"
+            id      = "$DestinationSectionGroupId"
             groupId = "$DestinationTeamId"
         }
         Add-Data -Body $B -Endpoint "/users/$SourceUPN/onenote/sections/$SourceSectionId/copyToSectionGroup" -IsGraph
