@@ -13,14 +13,23 @@ function Connect-Api {
 
         [Parameter(Mandatory = $true)]
         [string]
-        $TenantId
+        $TenantId,
+
+        [Parameter()]
+        [switch]
+        $GraphAPI,
+
+        [Parameter()]
+        [switch]
+        $OnenoteAPI
     )
 
     Begin {
-        $resource = "https://www.onenote.com/"
     }
 
     process {
+        if ($OnenoteAPI) {$resource = "https://www.onenote.com/"}
+        if ($GraphAPI) {$resource = "https://graph.microsoft.com/"}
         $B = @{
             "grant_type"    = "client_credentials"
             "client_id"     = "$ClientId"
@@ -33,7 +42,8 @@ function Connect-Api {
             contentType = "application/x-www-form-urlencoded"
             body        = $B
         }
-        $ENV:ONENOTE_API_TOKEN = (Invoke-RestMethod @R).access_token
+        if ($OnenoteAPI) {$ENV:ONENOTE_API_TOKEN = (Invoke-RestMethod @R).access_token}
+        if ($GraphAPI) {$ENV:GRAPH_API_TOKEN = (Invoke-RestMethod @R).access_token}
     }
 }
 
@@ -96,11 +106,15 @@ function Get-TeamNotebook {
     Param ( 
         [Parameter(Mandatory = $true)]
         [string]
-        $TeamID
+        $TeamID,
+
+        [Parameters(Mandatory = $true)]
+        [string]
+        $NotebookType 
     )
 
     Process {
-        Get-Data -Endpoint "/myOrganization/groups/$TeamID/notes/classnotebooks" -IsTeams
+        Get-Data -Endpoint "/myOrganization/groups/$TeamID/notes/$NotebookType" -IsTeams
     }
 }
 
@@ -122,28 +136,37 @@ function Add-Data {
 
         [Parameter()]
         [switch]
-        $IsTeams
+        $IsTeams,
+
+        [Parameter()]
+        [switch]
+        $IsGraph
     )
     
     begin {
         $resource = "https://www.onenote.com/api/$version"
+        $token = $ENV:ONENOTE_API_TOKEN
     }
 
     process {
+        if ($IsGraph) {
+            $resource = "https://graph.microsoft.com/$version"
+            $token = $ENV:GRAPH_API_TOKEN
+        }
         $B = $body | ConvertTo-Json
         $R = @{
             method      = "POST"
             contentType = "application/json"
             body        = $B
             headers     = @{
-                "authorization" = "bearer $ENV:ONENOTE_API_TOKEN"
+                "authorization" = "bearer $token"
             }
             uri         = ($resource + $endpoint)
         }
         if ($IsTeams) {
             $R.headers.Add("CustomUserAgent", "Teams/1.0")
-            Invoke-RestMethod @R 
         }
+        Invoke-RestMethod @R 
     }
 }
 
@@ -216,8 +239,8 @@ function Set-Data {
         }
         if ($IsTeams) {
             $R.headers.Add("CustomUserAgent", "Teams/1.0")
-            Invoke-RestMethod @R 
         }
+        Invoke-RestMethod @R 
     }
 }
 
@@ -266,8 +289,7 @@ function Copy-Section {
             id      = "$DestinationSectionId"
             groupId = "$DestinationTeamId"
         }
-        Add-Data -Body $B -Endpoint "/users/$SourceUPN/onenote/sections/$SourceSectionId/copyToSectionGroup"
+        Add-Data -Body $B -Endpoint "/users/$SourceUPN/onenote/sections/$SourceSectionId/copyToSectionGroup" -IsGraph
     }
 }
-
 
