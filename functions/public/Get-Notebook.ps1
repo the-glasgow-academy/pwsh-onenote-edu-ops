@@ -3,7 +3,7 @@ function Get-Notebook {
 
     Param (
         [Parameter(Mandatory = $true)]
-        [ValidateSet('user', 'group', 'site')]
+        [ValidateSet('users', 'groups', 'sites')]
             [String]
             $Scope,
 
