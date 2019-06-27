@@ -14,13 +14,18 @@ function Get-Notebook {
             # Will select a specific notebook if the ID is specified
             [Parameter()]
             [String]
-            $NotebookId
+            $NotebookId,
+
+            [Parameter()]
+            [ValidateSet('notebooks', 'sections', 'sectionGroups', 'pages')]
+            [String]
+            $ContentType = 'notebooks'
         )
 
         Process {
             $ep = "/$scope/$id/onenote/notebooks"
             if ($NotebookId) { $ep = $ep + "/$NotebookId" }
-            Invoke-Api -Method "GET" -Endpoint "/$Scope/$Id/onenote/notebooks"
+            Invoke-Api -Method "GET" -Endpoint "/$Scope/$Id/onenote/$ContentType"
         }
     }
 
