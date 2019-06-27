@@ -12,22 +12,22 @@ function Connect-Api {
 
         [Parameter(Mandatory = $true)]
         [string]
-        $TenantId,
+        $TenantId
     )
 
     Process {
         $resource = "https://graph.microsoft.com/"
         $body = @{
-            "grant_type" = "client_credentials"
-            "client_id" = "$ClientId"
+            "grant_type"    = "client_credentials"
+            "client_id"     = "$ClientId"
             "client_secret" = "$ClientSecret"
-            "resource" = "$resource"
+            "resource"      = "$resource"
         }
         $request = @{
-            method = "POST"
-            URI = "https://login.microsoftonline.com/$TenantId/ouath2/token"
+            method      = "POST"
+            URI         = "https://login.microsoftonline.com/$TenantId/ouath2/token"
             contentType = "application/x-www-form-urlencoded"
-            body = $body
+            body        = $body
         }
         Invoke-RestMethod @request
     }

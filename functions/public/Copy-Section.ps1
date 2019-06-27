@@ -24,7 +24,7 @@ function Copy-Section {
 
         # Define if user or group
         [Parameter(Mandatory = $true)]
-        [ValidateSet('users','groups')]
+        [ValidateSet('users', 'groups')]
         [string]
         $SourceScope,
 
@@ -34,9 +34,9 @@ function Copy-Section {
     )
 
     Process {
-        $b = @{id = "$DestinationId"}
-        if ($DestinationGroupId) {$b["groupId"] = "$DestinationGroupId"}
-        if ($NewName) {$b["renameAs"] = "$NewName"}
+        $b = @{id = "$DestinationId" }
+        if ($DestinationGroupId) { $b["groupId"] = "$DestinationGroupId" }
+        if ($NewName) { $b["renameAs"] = "$NewName" }
         Invoke-Api -Method "POST" -Endpoint "/$SourceScope/$SourceId/sections/$SourceSectionId/CopyToNotebook"
     }
 }
