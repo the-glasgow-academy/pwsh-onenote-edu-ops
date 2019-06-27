@@ -25,7 +25,7 @@ function Connect-Api {
         }
         $request = @{
             method      = "POST"
-            URI         = "https://login.microsoftonline.com/$TenantId/ouath2/token"
+            URI         = "https://login.microsoftonline.com/$TenantId/oauth2/token"
             contentType = "application/x-www-form-urlencoded"
             body        = $body
         }
