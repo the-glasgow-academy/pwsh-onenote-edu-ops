@@ -29,7 +29,7 @@ function Connect-Api {
             contentType = "application/x-www-form-urlencoded"
             body        = $body
         }
-        Invoke-RestMethod @request
+        $ENV:GRAPH_API_TOKEN = (Invoke-RestMethod @request).access_token
     }
 }
     
