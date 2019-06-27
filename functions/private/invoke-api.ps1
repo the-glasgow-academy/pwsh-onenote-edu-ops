@@ -10,18 +10,23 @@ function Invoke-Api {
         [string]
         $Method,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [string]
-        $Endpoint
+        $Endpoint,
+
+        [Parameter()]
+        [string]
+        $Uri
     )
 
     Process {
         $resource = "https://graph.microsoft.com/$Version"
+        if ($Endpoint) { $uri = $resource + $Endpoint}
         $request = @{
             method      = "$method"
             contentType = "application/json"
             headers     = @{ "authorization" = "bearer $ENV:GRAPH_API_TOKEN" }
-            uri         = ($resource + $endpoint)
+            uri         = $uri
         }
         if ($body) { $request["body"] = $body }
         Invoke-RestMethod @request
