@@ -16,7 +16,11 @@ function Invoke-Api {
 
         [Parameter()]
         [string]
-        $Uri
+        $Uri,
+
+        [Parameter()]
+        [string]
+        $Body
     )
 
     Process {
