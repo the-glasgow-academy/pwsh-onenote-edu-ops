@@ -6,6 +6,12 @@ function Copy-Section {
         [Parameter(Mandatory = $true)]
         [String]
         $DestinationId,
+
+        # Define if copying to notebook or section group
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('SectionGroup', 'Notebook')]
+        [string]
+        $DestinationType,
         
         # If copying to a group set the groups id
         [Parameter()]
@@ -37,7 +43,7 @@ function Copy-Section {
         $b = @{id = "$DestinationId" }
         if ($DestinationGroupId) { $b["groupId"] = "$DestinationGroupId" }
         if ($NewName) { $b["renameAs"] = "$NewName" }
-        Invoke-Api -Method "POST" -Endpoint "/$SourceScope/$SourceId/sections/$SourceSectionId/CopyToNotebook"
+        Invoke-Api -Method "POST" -Endpoint "/$SourceScope/$SourceId/sections/$SourceSectionId/CopyTo$DestinationType"
     }
 }
         
