@@ -23,9 +23,9 @@ function Get-Notebook {
         )
 
         Process {
-            $ep = "/$scope/$id/onenote/notebooks"
+            $ep = "/$scope/$id/onenote/$ContentType"
             if ($NotebookId) { $ep = $ep + "/$NotebookId" }
-            Invoke-Api -Method "GET" -Endpoint "/$Scope/$Id/onenote/$ContentType"
+            (Invoke-Api -Method "GET" -Endpoint $ep).value
         }
     }
 

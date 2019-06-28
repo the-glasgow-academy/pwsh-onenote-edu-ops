@@ -14,7 +14,7 @@ function Get-Content {
 
     Process {
         $ep = $self + "/$ContentType"
-        Invoke-Api -Method "GET" -uri $ep
+        (Invoke-Api -Method "GET" -uri $ep).value
     }
 }
 
